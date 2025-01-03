@@ -10,6 +10,7 @@ from store.forms import DeliveryPersonForm, ReviewForm, SignUpForm, UserUpdateFo
 from django.views.generic import UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from decimal import Decimal  # Assurez-vous d'importer Decimal
 
 from .models import Cart, CartItem, DeliveryPerson, Notification, Order, OrderItem, Product, Review, User
 
@@ -136,9 +137,10 @@ def checkout(request):
         return redirect('view_cart')
 
     total_price = sum(item.product.price_with_discount() * item.quantity for item in cart_items)
+    delivery_fee = Decimal('5.00')  # Convertir le prix de livraison en Decimal
 
     if request.method == 'POST':
-        order = Order.objects.create(user=request.user, total_price=total_price)
+        order = Order.objects.create(user=request.user, total_price=total_price + delivery_fee, delivery_fee=delivery_fee)
         for item in cart_items:
             OrderItem.objects.create(
                 order=order,
@@ -157,7 +159,7 @@ def checkout(request):
         messages.success(request, f"Votre commande #{order.id} a été validée avec succès !")
         return redirect('order_history')
 
-    return render(request, 'store/checkout.html', {'cart': cart, 'total_price': total_price})
+    return render(request, 'store/checkout.html', {'cart': cart, 'total_price': total_price, 'delivery_fee': delivery_fee})
 
 # Vue pour ajouter un produit aux favoris
 @login_required
@@ -171,7 +173,13 @@ def add_to_favorites(request, product_id):
 def view_favorites(request):
     return render(request, 'store/favorites.html', {'favorites': request.user.favorites.all()})
 
-
+# Vue pour supprimer un produit des favoris
+@login_required
+def remove_from_favorites(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    request.user.favorites.remove(product)  # Supprime le produit des favoris
+    messages.success(request, f"{product.name} a été supprimé de vos favoris.")
+    return redirect('view_favorites')  # Redirige vers la page des favoris
 def add_review(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     if request.method == 'POST':
@@ -305,4 +313,7 @@ def delivery_dashboard(request):
     delivery_person = get_object_or_404(DeliveryPerson, user=request.user)
     missions = Order.objects.filter(delivery_person=delivery_person, status='in_progress')
     
-    return render(request, 'store/delivery_dashboard.html', {'missions': missions})
+    # Calculer les gains du livreur
+    total_earnings = sum(order.delivery_fee for order in Order.objects.filter(delivery_person=delivery_person))
+
+    return render(request, 'store/delivery_dashboard.html', {'missions': missions, 'total_earnings': total_earnings})

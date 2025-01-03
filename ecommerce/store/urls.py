@@ -43,6 +43,10 @@ urlpatterns = [
     # Route pour ajouter un produit aux favoris
     path('favorites/add/<int:product_id>/', views.add_to_favorites, name='add_to_favorites'),
     
+    # Route pour la suppression d'un element de la liste des favoris
+    path('favorites/remove/<int:product_id>/', views.remove_from_favorites, name='remove_from_favorites'),
+    
+    
     # Route pour ajouter un avis sur un produit
     path('product/<int:product_id>/review/', views.add_review, name='add_review'),
     

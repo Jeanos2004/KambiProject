@@ -11,6 +11,10 @@
                 <h2 class="text-xl font-semibold">{{ product.name }}</h2>
                 <p>{{ product.description }}</p>
                 <p class="text-lg font-bold">Prix : {{ product.price }} €</p>
+                <form action="{% url 'remove_from_favorites' product.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="text-red-500">Supprimer</button>
+                </form>
             </div>
         {% empty %}
             <p>Vous n'avez pas encore ajouté de favoris.</p>

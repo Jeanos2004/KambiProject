@@ -93,6 +93,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     delivery_person = models.ForeignKey(DeliveryPerson, on_delete=models.SET_NULL, null=True, blank=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    delivery_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Nouveau champ pour le prix de livraison
     status = models.CharField(max_length=20, default='pending')  # Statut de la commande
     delivery_address = models.CharField(max_length=255, null=True)  # Adresse de livraison
     created_at = models.DateTimeField(auto_now_add=True)
