@@ -1,0 +1,22 @@
+<h1>Tableau de bord du livreur</h1>
+<h2>Mes missions de livraison</h2>
+<table>
+    <tr>
+        <th>ID de la commande</th>
+        <th>Client</th>
+        <th>Adresse de livraison</th>
+        <th>Statut</th>
+    </tr>
+    {% for mission in missions %}
+    <tr>
+        <td>{{ mission.id }}</td>
+        <td>{{ mission.user.username }}</td>
+        <td>{{ mission.delivery_address }}</td>
+        <td>{{ mission.status }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">Aucune mission en cours.</td>
+    </tr>
+    {% endfor %}
+</table> 

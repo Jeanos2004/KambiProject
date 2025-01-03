@@ -1,0 +1,26 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Mes Notifications</h2>
+
+<ul class="space-y-2">
+    {% for notification in notifications %}
+        <li class="p-4 border rounded-lg shadow-md bg-yellow-100">
+            <div class="flex justify-between items-center">
+                <div>
+                    {% if not notification.is_read %}
+                        <strong class="text-red-600">[NOUVEAU]</strong>
+                    {% endif %}
+                    <span class="text-gray-800">{{ notification.message }}</span>
+                    <small class="text-gray-500">(Reçue le {{ notification.created_at|date:"d/m/Y H:i" }})</small>
+                </div>
+                {% if not notification.is_read %}
+                    <a href="{% url 'mark_as_read' notification.id %}" class="text-blue-600 hover:underline">Marquer comme lue</a>
+                {% endif %}
+            </div>
+        </li>
+    {% empty %}
+        <li class="p-4 text-gray-500">Vous n'avez pas de notifications.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

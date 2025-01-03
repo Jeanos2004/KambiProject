@@ -1,0 +1,22 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<h2>Historique des commandes</h2>
+
+{% if orders %}
+    <ul>
+        {% for order in orders %}
+            <li>
+                <strong>Commande #{{ order.id }}</strong> - {{ order.created_at|date:"d M Y H:i" }} - Total : {{ order.total_price }} €
+                <ul>
+                    {% for item in order.items.all %}
+                        <li>{{ item.quantity }} x {{ item.product.name }} ({{ item.price }} €)</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Vous n'avez pas encore passé de commandes.</p>
+{% endif %}
+{% endblock %}

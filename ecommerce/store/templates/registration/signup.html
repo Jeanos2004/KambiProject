@@ -1,0 +1,36 @@
+<!-- templates/registration/signup.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+</head>
+<body>
+    <h2>Inscription</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="username">Nom d'utilisateur :</label>
+            <input type="text" name="username" id="username" required>
+        </div>
+        <div>
+            <label for="password">Mot de passe :</label>
+            <input type="password" name="password" id="password" required>
+        </div>
+        <div>
+            <label for="password2">Confirmer le mot de passe :</label>
+            <input type="password" name="password2" id="password2" required>
+        </div>
+        <button type="submit">S'inscrire</button>
+    </form>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

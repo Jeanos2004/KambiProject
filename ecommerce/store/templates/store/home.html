@@ -1,0 +1,10 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+    <h1 class="text-2xl font-bold">Bienvenue, {{ user.username }}!</h1>
+    <p>Découvrez nos produits !</p>
+</div>
+{% endblock %}

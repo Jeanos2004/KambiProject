@@ -1,0 +1,20 @@
+<h1>Liste des Livreurs</h1>
+<table>
+    <tr>
+        <th>Nom</th>
+        <th>Téléphone</th>
+        <th>Adresse</th>
+        <th>Disponibilité</th>
+        <th>Actions</th>
+    </tr>
+    {% for person in delivery_people %}
+    <tr>
+        <td>{{ person.user.username }}</td>
+        <td>{{ person.phone_number }}</td>
+        <td>{{ person.address }}</td>
+        <td>{{ person.is_available|yesno:"Disponible,Indisponible" }}</td>
+        <td><a href="{% url 'update_delivery_person' person.id %}">Modifier</a></td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'add_delivery_person' %}">Ajouter un livreur</a>

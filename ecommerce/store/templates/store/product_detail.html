@@ -1,0 +1,56 @@
+{% extends 'store/base.html' %} {% block content %}
+<div class="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+  {% if product.image.url %}
+  <img
+    src="{{ product.image.url }}"
+    alt="{{ product.name }}"
+    class="w-full h-48 object-cover rounded-md"
+  />{% endif %}
+  <h1 class="text-2xl font-bold">{{ product.name }}</h1>
+  <p>{{ product.description }}</p>
+  <p class="text-lg font-bold">Prix : {{ product.price }} €</p>
+  <div>
+    <button
+      class="bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+    >
+      <a href="{% url 'add_to_cart' product.id %}">Ajouter au panier</a>
+    </button>
+    <button
+      class="bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700"
+    >
+      <a href="{% url 'add_to_favorites' product.id %}">favoris</a>
+    </button>
+   
+
+    <!-- Formulaire pour acheter immédiatement -->
+    <form method="POST" class="inline-block">
+      {% csrf_token %}
+      <button type="submit" class="bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-300">Acheter maintenant</button>
+    </form>
+  </div>
+  <h3 class="mt-4 text-xl font-semibold">Avis :</h3>
+  <div>
+    {% for review in reviews %}
+    <div class="border-b pb-2 mb-2">
+      <p>
+        <strong>{{ review.user.username }}</strong> - Note : {{ review.rating }}
+        / 5
+      </p>
+      <p>{{ review.comment }}</p>
+      <p class="text-sm text-gray-500">Posté le {{ review.created_at }}</p>
+    </div>
+
+    {% empty %}
+    <p>Aucun avis pour ce produit.</p>
+    {% endfor %}
+  </div>
+
+  {% if user.is_authenticated %}
+  <a
+    href="{% url 'add_review' product.id %}"
+    class="mt-4 inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+    >Laisser un avis</a
+  >
+  {% endif %}
+</div>
+{% endblock %}

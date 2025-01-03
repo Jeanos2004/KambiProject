@@ -1,0 +1,47 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Panier{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+    <h1 class="text-2xl font-bold mb-4">{{ user.username }} : Votre Panier</h1>
+
+    {% if cart.items.count > 0 %}
+        <ul class="space-y-4">
+            {% for item in cart.items.all %}
+                <li class="flex justify-between items-center border-b pb-2">
+                    <div>
+                        <p>{{ item.product.name }} - {{ item.quantity }} x {{ item.product.price_with_discount }} € = {{ item.total_price }} €</p>
+                    </div>
+                    <div>
+                        <a href="{% url 'remove_from_cart' item.id %}" class="text-red-500 hover:underline">Supprimer</a>
+                        <form method="POST" action="{% url 'update_quantity' item.id %}" class="inline">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="border border-gray-300 rounded-md p-1 w-16" />
+                            <button type="submit" class="ml-2 bg-blue-600 text-white font-bold py-1 px-2 rounded hover:bg-blue-700">Mettre à jour</button>
+                        </form>
+                        
+                    </div>
+                    
+                </li>
+            
+            {% endfor %}
+            <li class="flex justify-between items-center border-b pb-2">
+                <div class="font-bold">Total à payer :</div>
+                <div class="text-lg">{{ cart.total_price }} €</div>
+                <div>
+                    <a href="{% url 'checkout' %}" class="ml-4 bg-green-600 text-white font-bold py-1 px-2 rounded hover:bg-green-700" >Valider le paiement</a>
+                </div>
+            </li>
+        </ul>
+        <h3 class="mt-4 text-lg font-bold">Total : {{ cart.total_price }} €</h3>
+        <button
+        class="bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700"
+      >
+        <a href="{% url 'assign_delivery_person' cart.id %}">Livreurs</a>
+      </button>
+    {% else %}
+        <p>Votre panier est vide.</p>
+    {% endif %}
+</div>
+{% endblock %}

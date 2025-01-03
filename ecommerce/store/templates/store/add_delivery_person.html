@@ -1,0 +1,11 @@
+<!-- Start Generation Here -->
+<h1>Ajouter un livreur</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Ajouter le livreur</button>
+</form>
+
+<a href="{% url 'delivery_person_list' %}">Retour à la liste des livreurs</a>
+<!-- End Generation Here -->

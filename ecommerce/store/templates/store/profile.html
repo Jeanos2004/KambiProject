@@ -1,0 +1,9 @@
+<!-- store/templates/store/profile.html -->
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+    <h1 class="text-2xl font-bold">Bienvenue, {{ user.username }}!</h1>
+    <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+</div>
+{% endblock %}
