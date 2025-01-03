@@ -264,9 +264,20 @@ def assign_delivery_person(request, order_id):
     if request.method == 'POST':
         delivery_person_id = request.POST.get('delivery_person')
         delivery_person = get_object_or_404(DeliveryPerson, id=delivery_person_id)
+        
+        # Récupérer l'adresse de livraison depuis le formulaire
+        delivery_address = request.POST.get('delivery_address')
+        
         order.delivery_person = delivery_person
         order.status = 'in_progress'
+        order.delivery_address = delivery_address  # Assigner l'adresse de livraison à la commande
         order.save()
+
+        # Assigner le livreur au panier
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart.delivery_person = delivery_person  # Assigner le livreur au panier
+        cart.save()  # Sauvegarder le panier
+
         delivery_person.is_available = False  # Marquer le livreur comme indisponible
         delivery_person.save()
 

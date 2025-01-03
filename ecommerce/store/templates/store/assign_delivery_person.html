@@ -1,4 +1,3 @@
-
 <h1>Assigner un livreur à la commande {{ order.id }}</h1>
 <form method="POST">
     {% csrf_token %}
@@ -8,5 +7,9 @@
         <option value="{{ person.id }}">{{ person.user.username }}</option>
         {% endfor %}
     </select>
+    
+    <label for="delivery_address">Adresse de livraison :</label>
+    <input type="text" name="delivery_address" id="delivery_address" required placeholder="Entrez l'adresse de livraison">
+    
     <button type="submit">Assigner</button>
 </form>
